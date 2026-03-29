@@ -126,7 +126,7 @@ export function About() {
           <div className="space-y-3">
             <p className="text-slate-500 text-sm">UPI ID: <span className="text-slate-300 font-mono font-medium">sguha1988.life@okicici</span></p>
             <a
-              href="upi://pay?pa=sguha1988.life@okicici&pn=sahasrangshuguha&am=15&cu=INR"
+              href="upi://pay?pa=sguha1988.life@okicici&pn=sahasrangshu%20guha&am=15&cu=INR"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 text-yellow-300 font-semibold hover:from-yellow-500/30 hover:to-orange-500/30 hover:border-yellow-400/50 hover:text-yellow-200 transition-all duration-200 text-sm"
             >
               <Coffee size={16} />
