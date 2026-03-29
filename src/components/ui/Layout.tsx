@@ -53,7 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="max-w-5xl mx-auto px-6 pt-4">
         <div className="glass rounded-2xl p-4 border border-white/5 bg-brand-primary/5">
           <p className="text-sm text-slate-400 leading-relaxed text-center italic">
-            "Credit cards often have different billing cycles. By strategically choosing a card whose statement has just been generated, you can get up to 45-55 days of interest-free credit."
+            "Credit cards often have different billing cycles. By strategically choosing a card whose statement has just been generated, you can get up to 55 days of interest-free credit."
           </p>
         </div>
       </div>
