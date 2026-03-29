@@ -104,7 +104,7 @@ export function About() {
           <h2 className="text-2xl font-display font-bold text-white">Buy Me a Coffee ☕</h2>
           <p className="text-slate-400 leading-relaxed max-w-md mx-auto">
             If you find WhichCard useful and want to support my work, consider buying me a cup of hot filter coffee!
-            Scan the QR code or click the link below to pay via UPI.
+            Scan the QR code to pay via UPI.
           </p>
 
           <a
