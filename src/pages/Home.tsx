@@ -19,7 +19,7 @@ export function Home() {
           Start Managing Your Credit Today
         </h1>
         <p className="text-xl text-slate-400 leading-relaxed">
-          Add your credit cards to find out which one gives you the maximum 
+          Add your credit cards (only title and dates required) to find out which one gives you the maximum 
           time for repayment at any given moment.
         </p>
         <Link
