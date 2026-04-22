@@ -3,6 +3,7 @@
 @theme {
   --color-brand-primary: oklch(0.6 0.3 260);
   --color-brand-secondary: oklch(0.7 0.2 300);
+  --color-emergency: oklch(0.65 0.25 25);
   --color-surface-900: oklch(0.15 0.02 260);
   --color-surface-800: oklch(0.2 0.03 260);
   --color-surface-700: oklch(0.25 0.03 260);
@@ -33,6 +34,10 @@
 
 .brand-gradient {
   @apply bg-gradient-to-br from-brand-primary to-brand-secondary;
+}
+
+.emergency-gradient {
+  @apply bg-gradient-to-br from-emergency to-rose-600;
 }
 
 /* Custom scrollbar */

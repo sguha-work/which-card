@@ -57,7 +57,7 @@ export function Home() {
               </h1>
               <div className="space-y-4">
                 <p className="text-lg text-slate-400">
-                  You'll get up to <span className="text-white font-bold text-2xl px-2">{recommendation?.daysToRepay}</span> days to repay this purchase.
+                  You'll get up to <span className={`font-bold text-2xl px-2 ${(recommendation?.daysToRepay ?? 0) < 14 ? "text-emergency" : "text-white"}`}>{recommendation?.daysToRepay}</span> days to repay this purchase.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-4">
                   <div className="space-y-1">
@@ -75,7 +75,7 @@ export function Home() {
             <div className="flex justify-center md:justify-end">
               {recommendation && (
                 <div className="w-full max-w-sm transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                  <CreditCard card={recommendation.bestCard} isBest />
+                  <CreditCard card={recommendation.bestCard} isBest daysToRepay={recommendation.daysToRepay} />
                 </div>
               )}
             </div>
