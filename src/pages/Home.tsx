@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Clock, PlusCircle, Info } from "lucide-react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import type { CreditCard as CardType } from "../types";
-import { getBestCard } from "../utils/cardLogic";
+import { getBestCard, getCardRecommendation } from "../utils/cardLogic";
 import { CreditCard } from "../components/CreditCard";
 
 export function Home() {
@@ -93,13 +93,17 @@ export function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map((card) => (
-              <CreditCard
-                key={card.id}
-                card={card}
-                isBest={card.id === recommendation?.bestCard.id}
-              />
-            ))}
+            {cards.map((card) => {
+              const recommendationForCard = getCardRecommendation(card);
+              return (
+                <CreditCard
+                  key={card.id}
+                  card={card}
+                  isBest={card.id === recommendation?.bestCard.id}
+                  daysToRepay={recommendationForCard.daysToRepay}
+                />
+              );
+            })}
           </div>
         </section>
       )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, CreditCard as CardIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, CreditCard as CardIcon, Download, Upload } from "lucide-react";
 import type { CreditCard as CardType } from "../types";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Modal } from "../components/ui/Modal";
@@ -41,6 +41,57 @@ export function ManageCards() {
     setIsModalOpen(false);
   };
 
+  const handleExport = () => {
+    const dataStr = JSON.stringify(cards, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `which-card-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const importedCards = JSON.parse(content);
+        
+        if (Array.isArray(importedCards)) {
+          // Basic validation
+          const isValid = importedCards.every(card => 
+            card.id && card.title && 
+            typeof card.billGenerationDate === 'number' && 
+            typeof card.billPaymentDate === 'number'
+          );
+
+          if (isValid) {
+            if (window.confirm(`Import ${importedCards.length} cards? This will replace your current data.`)) {
+              setCards(importedCards);
+            }
+          } else {
+            alert("Invalid card data format.");
+          }
+        } else {
+          alert("Imported file must contain an array of cards.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error parsing JSON file.");
+      }
+    };
+    reader.readAsText(file);
+    // Reset input
+    e.target.value = "";
+  };
+
   return (
     <div className="space-y-12">
       <header className="flex items-center justify-between">
@@ -48,13 +99,33 @@ export function ManageCards() {
           <h1 className="text-4xl font-display font-bold text-white tracking-tight">Your Cards</h1>
           <p className="text-slate-400">Manage your credit cards and billing cycles.</p>
         </div>
-        <button
-          onClick={() => openModal()}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl brand-gradient text-white font-bold shadow-lg shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all"
-        >
-          <Plus size={20} />
-          Add Card
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 mr-4">
+            <button
+              onClick={handleExport}
+              title="Export Cards to JSON"
+              className="p-3 rounded-xl bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
+            >
+              <Download size={20} />
+            </button>
+            <label className="p-3 rounded-xl bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-white/5 cursor-pointer">
+              <Upload size={20} />
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleImport}
+                className="hidden"
+              />
+            </label>
+          </div>
+          <button
+            onClick={() => openModal()}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl brand-gradient text-white font-bold shadow-lg shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all"
+          >
+            <Plus size={20} />
+            Add Card
+          </button>
+        </div>
       </header>
 
       {cards.length === 0 ? (

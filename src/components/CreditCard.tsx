@@ -7,9 +7,10 @@ interface CreditCardProps {
   isBest?: boolean;
   onClick?: () => void;
   actions?: React.ReactNode;
+  daysToRepay?: number;
 }
 
-export function CreditCard({ card, isBest, onClick, actions }: CreditCardProps) {
+export function CreditCard({ card, isBest, onClick, actions, daysToRepay }: CreditCardProps) {
   const getGradient = (id: string) => {
     const gradients = [
       "from-indigo-600 to-violet-700",
@@ -75,6 +76,23 @@ export function CreditCard({ card, isBest, onClick, actions }: CreditCardProps) 
               </div>
             </div>
           </div>
+          
+          {daysToRepay !== undefined && (
+            <div className="pt-4 mt-2 border-t border-white/5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">Interest Free</span>
+                <span className="text-sm font-bold text-brand-primary">{daysToRepay} Days</span>
+              </div>
+              <div className="w-full bg-white/5 h-1.5 rounded-full mt-2 overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min((daysToRepay / 55) * 100, 100)}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                  className="h-full brand-gradient"
+                />
+              </div>
+            </div>
+          )}
 
           {actions && (
             <div className="pt-4 border-t border-white/5 flex gap-2">
