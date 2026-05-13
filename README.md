@@ -31,18 +31,31 @@ Built with modern, high-performance tools for a silky-smooth experience:
 
 ## 🚀 How to Use
 
+Getting started with **Which Card?** is easier than paying off a balance!
+
+1.  **Visit the App**: Head over to the live version at [sguha-work.github.io/which-card/](https://sguha-work.github.io/which-card/#/).
+2.  **Add Your Cards**: Navigate to the **Manage Cards** page. Enter your card titles and their billing cycle dates (Generation Date and Payment Date).
+3.  **Check Before You Swipe**: Make it a habit to check the **Home** page every day before you make a purchase. The app will instantly tell you which card to use for the maximum interest-free period.
+4.  **Manage Your Data**:
+    *   **Export**: Want to keep a backup? Use the **Export** button on the Manage Cards page to download your card data as a JSON file.
+    *   **Import**: Moving to a new browser or device? Simply use the **Import** button to upload your backup and restore your settings instantly.
+
+---
+
+## 💻 Local Development (For the Tech-Savvy)
+
+If you'd like to run the app locally:
+
 1.  **Clone & Install**:
     ```bash
     git clone https://github.com/sguha-work/which-card.git
     cd which-card
     npm install
     ```
-2.  **Launch the App**:
+2.  **Launch**:
     ```bash
     npm run dev
     ```
-3.  **Add Your Arsenal**: Go to **Manage Cards** and enter your card titles along with their bill generation and payment dates (just the day of the month!).
-4.  **Swipe Wisely**: Check the Home screen every time you're about to buy something. We’ll show you the "Best to Use" card and exactly how many days of interest-free freedom you have left.
 
 ---
 
