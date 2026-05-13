@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Clock, PlusCircle, Info } from "lucide-react";
+import { ArrowUpRight, Clock, PlusCircle, Info, AlertCircle } from "lucide-react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import type { CreditCard as CardType } from "../types";
-import { getBestCard, getCardRecommendation } from "../utils/cardLogic";
+import { getBestCard, getCardRecommendation, getUpcomingPayments } from "../utils/cardLogic";
 import { CreditCard } from "../components/CreditCard";
 
 export function Home() {
   const [cards] = useLocalStorage<CardType[]>("credit-cards", []);
   const recommendation = getBestCard(cards);
+  const upcomingPayments = getUpcomingPayments(cards);
 
   if (cards.length === 0) {
     return (
@@ -41,7 +42,41 @@ export function Home() {
   }
 
   return (
-    <div className="space-y-16 py-4">
+    <div className="space-y-12 py-4">
+      {/* Upcoming Payments Alert */}
+      {upcomingPayments.length > 0 && (
+        <section className="animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className="relative group overflow-hidden rounded-3xl p-1 bg-gradient-to-r from-emergency/50 to-rose-500/50 shadow-2xl shadow-emergency/20">
+            <div className="relative glass rounded-[1.4rem] px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl emergency-gradient flex items-center justify-center text-white shadow-lg shadow-emergency/30 shrink-0">
+                  <AlertCircle size={24} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-display font-bold text-white">Upcoming Bill Payments</h3>
+                  <p className="text-sm text-slate-400">You have {upcomingPayments.length} {upcomingPayments.length === 1 ? 'bill' : 'bills'} due within the next 7 days.</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap justify-center gap-3">
+                {upcomingPayments.map(({ card, dueDate }) => (
+                  <div key={card.id} className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+                    <span className="text-white font-semibold text-sm">{card.title}</span>
+                    <span className="w-px h-3 bg-white/10" />
+                    <span className="text-emergency font-bold text-sm">
+                      {dueDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Ambient Glow */}
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emergency/10 rounded-full blur-2xl animate-pulse" />
+          </div>
+        </section>
+      )}
+
       {/* Recommendation Hero */}
       <section className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>

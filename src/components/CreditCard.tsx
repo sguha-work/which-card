@@ -1,5 +1,5 @@
 import type { CreditCard as CardType } from "../types";
-import { CreditCard as CardIcon, Calendar, ArrowRight } from "lucide-react";
+import { CreditCard as CardIcon, Calendar, ArrowRight, Info } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface CreditCardProps {
@@ -78,18 +78,25 @@ export function CreditCard({ card, isBest, onClick, actions, daysToRepay }: Cred
           </div>
           
           {daysToRepay !== undefined && (
-            <div className="pt-4 mt-2 border-t border-white/5">
+            <div className="pt-4 mt-2 border-t border-white/5 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">Repayment In</span>
                 <span className={`text-sm font-bold ${daysToRepay < 14 ? "text-emergency" : "text-brand-primary"}`}>{daysToRepay} Days</span>
               </div>
-              <div className="w-full bg-white/5 h-1.5 rounded-full mt-2 overflow-hidden">
+              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min((daysToRepay / 55) * 100, 100)}%` }}
                   transition={{ duration: 1, ease: "easeOut" }}
                   className={`h-full ${daysToRepay < 14 ? "emergency-gradient" : "brand-gradient"}`}
                 />
+              </div>
+              
+              <div className="flex gap-2 items-start opacity-40 group-hover:opacity-100 transition-opacity">
+                <Info size={10} className="mt-0.5 text-brand-primary shrink-0" />
+                <p className="text-[9px] leading-tight text-slate-400">
+                  Calculated using <span className="text-white font-medium">Generation Date + 1</span> to account for end-of-day statement processing.
+                </p>
               </div>
             </div>
           )}
