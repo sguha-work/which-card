@@ -3,7 +3,7 @@
 
 Ever stood at a checkout counter and wondered, *"Which card should I swipe to procrastinate this payment for as long as humanly possible?"* 💸 
 
-We've all been there. Banks love to hide your due dates in fine print, but **Which Card?** brings them front and center. Our mission is simple: to help you keep your money in your pocket for the longest time allowed by law (and your bank’s statement cycle). 🚀
+We've all been there. Banks love to hide your due dates in fine print, but **Which Card?** brings them front and center. Our mission is simple: to help you keep your money in your pocket for the longest time allowed by law (and your bank's statement cycle). 🚀
 
 ---
 
@@ -11,9 +11,28 @@ We've all been there. Banks love to hide your due dates in fine print, but **Whi
 
 *   **🎯 The "Smart Swipe" Recommendation**: At any given second, we tell you exactly which card gives you the maximum days to repay. 
 *   **⏰ Proactive Bill Alerts**: Never miss a payment again. We'll wave a red flag if any bill is due within the next 7 days.
-*   **🛡️ Conservative Calculations**: We use the `Generation Date + 1` logic. Why? Because banks are sneaky and sometimes process statements late at night. We’d rather you be safe than sorry.
+*   **🛡️ Conservative Calculations**: We use the `Generation Date + 1` logic. Why? Because banks are sneaky and sometimes process statements late at night. We'd rather you be safe than sorry.
 *   **💎 Liquid Glass Interface**: A premium, macOS-inspired UI that makes managing debt feel... surprisingly elegant.
-*   **🔒 Privacy First**: Your data stays where it belongs—on your device. We use Local Storage, meaning no servers, no logins, and zero tracking.
+*   **🔒 Privacy First — Persistent Local Storage**: Your data stays where it belongs—on your device. We use **IndexedDB** (backed by `navigator.storage.persist`) so your card data survives browser clean-ups, cache clears, and storage-pressure evictions. No servers, no logins, zero tracking.
+*   **💾 Import / Export**: Backup your card data as a JSON file at any time and restore it on a new device in one click.
+
+---
+
+## 🗄️ Storage: Why We Upgraded from `localStorage` to IndexedDB
+
+Earlier versions of **Which Card?** stored your card data in `localStorage`. While convenient, `localStorage` has a few well-known limitations:
+
+| Concern | `localStorage` | IndexedDB + `persist()` |
+|---|---|---|
+| **Eviction risk** | Browser *can* silently wipe it under storage pressure | Durable storage is explicitly requested via `navigator.storage.persist()` — the browser must ask the user before evicting |
+| **Capacity** | ~5 MB hard limit per origin | Tens of MBs to GBs (quota-based) |
+| **Blocking** | Synchronous — blocks the main thread | Fully async — never jank the UI |
+| **Data integrity** | Plain string serialisation | Structured clone — handles complex objects natively |
+
+### What this means for you
+- Your cards are now stored in **IndexedDB**, a robust browser database designed for long-lived, offline-capable applications.
+- On first launch after upgrading, **existing `localStorage` data is automatically migrated** to IndexedDB — nothing is lost.
+- The app calls `navigator.storage.persist()` at startup, upgrading your origin to *persistent* storage mode. In supporting browsers, this means the data will only ever be removed if *you* explicitly clear the site data.
 
 ---
 
@@ -26,6 +45,7 @@ Built with modern, high-performance tools for a silky-smooth experience:
 -   **Styling**: [Tailwind CSS 4.0](https://tailwindcss.com/) (using the latest and greatest)
 -   **Animations**: [Framer Motion](https://www.framer.com/motion/) (for those buttery transitions)
 -   **Icons**: [Lucide React](https://lucide.dev/) (clean and crisp)
+-   **Storage**: [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) via a custom key-value wrapper + [`navigator.storage.persist()`](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/persist)
 
 ---
 
@@ -62,6 +82,16 @@ If you'd like to run the app locally:
 ## 📝 A Note on Logic
 
 We calculate your statement dates using `x+1` (where `x` is your generation date). This accounts for the fact that transactions made on the generation date itself might fall into either the old or new cycle depending on the bank's cutoff time. **We play it safe so your wallet doesn't take the hit.**
+
+---
+
+## 📋 Changelog
+
+### Storage Upgrade — IndexedDB + Persistent Storage
+- Replaced `localStorage` with **IndexedDB** for all card data storage.
+- Added `navigator.storage.persist()` at app startup to request durable storage from the browser.
+- Implemented a one-time automatic migration: existing `localStorage` data is copied to IndexedDB and removed from `localStorage` transparently on first load.
+- Import / Export functionality remains fully compatible with the new storage layer.
 
 ---
 
