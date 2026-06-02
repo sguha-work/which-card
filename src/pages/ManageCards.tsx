@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { Plus, Pencil, Trash2, CreditCard as CardIcon, Download, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, CreditCard as CardIcon, Download, Upload, Loader2 } from "lucide-react";
 import type { CreditCard as CardType } from "../types";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useIndexedDB } from "../hooks/useIndexedDB";
 import { Modal } from "../components/ui/Modal";
 import { CardForm } from "../components/CardForm";
 import { CreditCard } from "../components/CreditCard";
 import { AnimatePresence } from "framer-motion";
 
 export function ManageCards() {
-  const [cards, setCards] = useLocalStorage<CardType[]>("credit-cards", []);
+  const [cards, setCards, loading] = useIndexedDB<CardType[]>("credit-cards", []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCard, setEditingCard] = useState<CardType | null>(null);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+        <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+        <p className="text-slate-500 font-medium animate-pulse">Loading your cards…</p>
+      </div>
+    );
+  }
 
   const handleAddEdit = (cardData: Omit<CardType, "id"> & { id?: string }) => {
     if (editingCard) {

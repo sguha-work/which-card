@@ -1,14 +1,23 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Clock, PlusCircle, Info, AlertCircle } from "lucide-react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { ArrowUpRight, Clock, PlusCircle, Info, AlertCircle, Loader2 } from "lucide-react";
+import { useIndexedDB } from "../hooks/useIndexedDB";
 import type { CreditCard as CardType } from "../types";
 import { getBestCard, getCardRecommendation, getUpcomingPayments } from "../utils/cardLogic";
 import { CreditCard } from "../components/CreditCard";
 
 export function Home() {
-  const [cards] = useLocalStorage<CardType[]>("credit-cards", []);
+  const [cards, , loading] = useIndexedDB<CardType[]>("credit-cards", []);
   const recommendation = getBestCard(cards);
   const upcomingPayments = getUpcomingPayments(cards);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+        <p className="text-slate-500 font-medium animate-pulse">Loading your cards…</p>
+      </div>
+    );
+  }
 
   if (cards.length === 0) {
     return (
